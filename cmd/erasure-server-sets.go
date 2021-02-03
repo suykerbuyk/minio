@@ -909,9 +909,14 @@ func (z *erasureServerSets) listObjects(ctx context.Context, bucket, prefix, mar
 		loi.NextMarker = entries.Files[len(entries.Files)-1].Name
 	}
 
+	var prevPrefix string
 	for _, entry := range entries.Files {
 		objInfo := entry.ToObjectInfo(entry.Volume, entry.Name)
 		if HasSuffix(objInfo.Name, SlashSeparator) && !recursive {
+			if objInfo.Name != prevPrefix {
+				loi.Prefixes = append(loi.Prefixes, objInfo.Name)
+				prevPrefix = objInfo.Name
+			}
 			loi.Prefixes = append(loi.Prefixes, objInfo.Name)
 			continue
 		}

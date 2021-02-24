@@ -1673,7 +1673,7 @@ func (s *xlStorage) WriteAll(ctx context.Context, volume string, path string, b 
 		atomic.AddInt32(&s.activeIOCount, -1)
 	}()
 
-	w, err := s.openFile(volume, path, os.O_CREATE|os.O_SYNC|os.O_WRONLY)
+	w, err := s.openFile(volume, path, os.O_CREATE|GlobalFileSyncFlag|os.O_WRONLY)
 	if err != nil {
 		return err
 	}
@@ -1700,7 +1700,7 @@ func (s *xlStorage) AppendFile(ctx context.Context, volume string, path string, 
 	var w *os.File
 	// Create file if not found. Not doing O_DIRECT here to avoid the code that does buffer aligned writes.
 	// AppendFile() is only used by healing code to heal objects written in old format.
-	w, err = s.openFile(volume, path, os.O_CREATE|os.O_SYNC|os.O_APPEND|os.O_WRONLY)
+	w, err = s.openFile(volume, path, os.O_CREATE|GlobalFileSyncFlag|os.O_APPEND|os.O_WRONLY)
 	if err != nil {
 		return err
 	}

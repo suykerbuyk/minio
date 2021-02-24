@@ -47,6 +47,7 @@ import (
 
 // minio configuration related constants.
 const (
+	GlobalFileSyncFlag     = os.O_SYNC
 	GlobalMinioDefaultPort = "9000"
 
 	globalMinioDefaultRegion = ""
